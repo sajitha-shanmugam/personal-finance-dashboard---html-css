@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashlytics - Fixed Costs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            background-color: #d9d9d9;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #4ca365;
+            padding: 20px;
+            height: 100vh;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            padding: 15px;
+            background: #3b854e;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .menu-item:hover {
+            background: #357645;
+        }
+
+        .dashboard {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .background-panel {
+            width: 90%;
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .header {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .content-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .table-container {
+            width: 65%;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background: #4ca365;
+            color: white;
+        }
+
+        .form-container {
+            background: #6ebd75;
+            padding: 20px;
+            border-radius: 10px;
+            width: 30%;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background: white;
+            color: #4ca365;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .form-container button:hover {
+            background: #d9d9d9;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background: darkred;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Cashlytics</h2>
+        <div class="menu-item">Current Month</div>
+        <div class="menu-item">Monthly Record</div>
+        <div class="menu-item">Fixed Costs</div>
+        <div class="menu-item">Log Off</div>
+    </div>
+    
+    <div class="dashboard">
+        <div class="background-panel">
+            <div class="header">Fixed Costs</div>
+            <div class="content-container">
+                <div class="table-container">
+                    <table id="cost-table">
+                        <tr>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Ending Date</th>
+                            <th>Action</th>
+                        </tr>
+                        <tr>
+                            <td>Motorcycle's insurance</td>
+                            <td>$750</td>
+                            <td>15/12/2021</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td>Health insurance</td>
+                            <td>$1000</td>
+                            <td>15/02/2022</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td>Mobile phone connection plan</td>
+                            <td>$550</td>
+                            <td>Never</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td>University's installment</td>
+                            <td>$7500</td>
+                            <td>01/12/2028</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td>Rent</td>
+                            <td>$25000</td>
+                            <td>01/01/2023</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="form-container">
+                    <h3>New Fixed Cost</h3>
+                    <label>Description</label>
+                    <input type="text" id="desc" placeholder="Enter description">
+                    <label>Amount</label>
+                    <input type="number" id="amount" placeholder="Enter amount">
+                    <label>End date</label>
+                    <input type="date" id="date">
+                    <button onclick="addFixedCost()">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addFixedCost() {
+            let description = document.getElementById("desc").value.trim();
+            let amount = document.getElementById("amount").value.trim();
+            let date = document.getElementById("date").value.trim();
+
+            if (description === "" || amount === "" || date === "") {
+                alert("Please fill in all fields");
+                return;
+            }
+
+            let table = document.getElementById("cost-table");
+            let row = document.createElement("tr");
+
+            let descCell = document.createElement("td");
+            let amountCell = document.createElement("td");
+            let dateCell = document.createElement("td");
+            let actionCell = document.createElement("td");
+
+            descCell.textContent = description;
+            amountCell.textContent = `$${amount}`;
+            dateCell.textContent = date;
+
+            let deleteBtn = document.createElement("button");
+            deleteBtn.textContent = "Delete";
+            deleteBtn.className = "delete-btn";
+            deleteBtn.onclick = function () {
+                deleteRow(deleteBtn);
+            };
+
+            actionCell.appendChild(deleteBtn);
+            row.appendChild(descCell);
+            row.appendChild(amountCell);
+            row.appendChild(dateCell);
+            row.appendChild(actionCell);
+            table.appendChild(row);
+
+            document.getElementById("desc").value = "";
+            document.getElementById("amount").value = "";
+            document.getElementById("date").value = "";
+        }
+
+        function deleteRow(button) {
+            let row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+    </script>
+</body>
+</html>

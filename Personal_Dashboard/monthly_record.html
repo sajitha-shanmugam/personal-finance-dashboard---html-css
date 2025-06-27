@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Record</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        .sidebar {
+            width: 250px;
+            background-color: #2E7D32;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+        }
+        .sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #1B5E20;
+        }
+        
+        .container {
+            margin-left: 270px;
+            padding: 20px;
+            width: calc(100% - 270px);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #2e7d32;
+            padding: 15px;
+            color: white;
+            border-radius: 10px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .card {
+            background: #a5d6a7;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .card.expenses {
+            color: red;
+        }
+        .card.profit {
+            color: blue;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            z-index: 1000;
+        }
+        .modal input {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 5px;
+        }
+        .modal button {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Cashlytics</h2>
+        
+        <a href="dashboard.html">📅 Current Month</a>
+        <a href="monthly_record.html">📜 Monthly Record</a>
+        <a href="fixed_cost.html">💰 Fixed Costs</a>
+        <a href="#">🚪 Log Off</a>
+    </div>
+    <div class="container">
+        <div class="header">
+            <h1>Monthly Record</h1>
+            <div class="user">👤 BHEULLAA</div>
+        </div>
+        <div class="grid" id="monthGrid">
+            
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <h3>Edit Month Data</h3>
+        <input type="text" id="editIncome" placeholder="Income">
+        <input type="text" id="editExpenses" placeholder="Expenses">
+        <input type="text" id="editProfit" placeholder="Profit">
+        <button onclick="saveEdit()">Save</button>
+        <button onclick="closeModal()">Cancel</button>
+    </div>
+
+    <script>
+        let months = [
+            { name: "January", income: "No Data", expenses: "", profit: "" },
+            { name: "February", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "March", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "April", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "May", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "June", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "July", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "August", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "September", income: "₹75,000", expenses: "₹25,000", profit: "₹50,000" },
+            { name: "October", income: "On Going Month", expenses: "", profit: "" },
+            { name: "November", income: "Upcoming Month", expenses: "", profit: "" },
+            { name: "December", income: "Upcoming Month", expenses: "", profit: "" }
+        ];
+
+        function loadMonths() {
+            let grid = document.getElementById("monthGrid");
+            grid.innerHTML = "";
+            months.forEach((month, index) => {
+                let card = document.createElement("div");
+                card.classList.add("card");
+                card.innerHTML = `${month.name}<br>Income: ${month.income}<br>Expenses: ${month.expenses}<br>Profit: ${month.profit}`;
+                card.onclick = () => openModal(index);
+                grid.appendChild(card);
+            });
+        }
+
+        let editIndex;
+        function openModal(index) {
+            editIndex = index;
+            document.getElementById("editIncome").value = months[index].income;
+            document.getElementById("editExpenses").value = months[index].expenses;
+            document.getElementById("editProfit").value = months[index].profit;
+            document.getElementById("editModal").style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById("editModal").style.display = "none";
+        }
+
+        function saveEdit() {
+            months[editIndex].income = document.getElementById("editIncome").value;
+            months[editIndex].expenses = document.getElementById("editExpenses").value;
+            months[editIndex].profit = document.getElementById("editProfit").value;
+            closeModal();
+            loadMonths();
+        }
+
+        loadMonths();
+    </script>
+</body>
+</html>

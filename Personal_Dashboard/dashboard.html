@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashlytics Dashboard</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        /* Layout */
+        .container {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #2E7D32;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+        }
+        .sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #1B5E20;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            flex: 1;
+            padding: 20px;
+            margin-left: 270px;
+        }
+
+        /* Summary */
+        .summary {
+            text-align: center;
+        }
+
+        .total-box {
+            background: #44b347;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .total {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .increase span {
+            background: green;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        /* Stats Section */
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            width: 30%;
+            min-width: 180px;
+            cursor: pointer;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .income {
+            color: green;
+        }
+
+        .expense {
+            color: red;
+        }
+
+        .total-expense {
+            color: darkred;
+        }
+
+        .total-income {
+            color: darkgreen;
+        }
+
+        /* Editable Styles */
+        .editable {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 18px;
+            text-align: center;
+            cursor: text;
+        }
+
+        /* Save Button */
+        .save-btn {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #2E7D32;
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: none;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .save-btn:hover {
+            background-color: #1B5E20;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Cashlytics</h2>
+            <a href="dashboard.html">📅 Current Month</a>
+            <a href="monthly_record.html">📜 Monthly Record</a>
+            <a href="fixed_cost.html">💰 Fixed Costs</a>
+            <a href="#">🚪 Log Off</a>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard">
+            <h1>September</h1>
+
+            <!-- Summary -->
+            <div class="summary">
+                <div class="total-box">
+                    <h3>Grand total this month is...</h3>
+                    <p class="total" contenteditable="true">$36,050.00</p>
+                    <p class="increase">It’s <span>⬆ 54%</span> more than last month!</p>
+                </div>
+            </div>
+
+            <!-- Income & Expenses -->
+            <div class="stats">
+                <div class="stat-box income">
+                    <h3>Salary Income</h3>
+                    <p contenteditable="true" class="editable">+ $75,000</p>
+                </div>
+                <div class="stat-box income">
+                    <h3>Additional Income</h3>
+                    <p contenteditable="true" class="editable">+ $12,650</p>
+                </div>
+                <div class="stat-box total-income">
+                    <h3>Total</h3>
+                    <p contenteditable="true" class="editable">+ $87,650</p>
+                </div>
+                <div class="stat-box expense">
+                    <h3>Fixed Costs</h3>
+                    <p contenteditable="true" class="editable">- $34,800</p>
+                </div>
+                <div class="stat-box expense">
+                    <h3>Eventual Expenses & Investment</h3>
+                    <p contenteditable="true" class="editable">- $16,800</p>
+                </div>
+                <div class="stat-box total-expense">
+                    <h3>Total</h3>
+                    <p contenteditable="true" class="editable">- $51,600</p>
+                </div>
+            </div>
+
+            <button id="saveChanges" class="save-btn">Save Changes</button>
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const editableFields = document.querySelectorAll(".editable");
+            const saveButton = document.getElementById("saveChanges");
+
+            // Show save button when content changes
+            editableFields.forEach(field => {
+                field.addEventListener("input", () => {
+                    saveButton.style.display = "block";
+                });
+            });
+
+            // Save the changes
+            saveButton.addEventListener("click", () => {
+                let updatedData = {};
+                
+                editableFields.forEach(field => {
+                    updatedData[field.previousElementSibling.innerText] = field.innerText;
+                });
+
+                console.log("Saved Data:", updatedData);
+                alert("Changes Saved!");
+
+                // Hide save button after saving
+                saveButton.style.display = "none";
+            });
+        });
+    </script>
+</body>
+</html>

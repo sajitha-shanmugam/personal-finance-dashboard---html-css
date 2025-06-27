@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Costs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            background-color: #f4f4f4;
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #2E7D32;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: 100%;
+        }
+        .sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+        .sidebar a:hover {
+            background-color: #1B5E20;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+            padding: 20px;
+        }
+        /* Profile Grid */
+        .profile-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        .profile {
+            display: flex;
+            align-items: center;
+        }
+        .profile span {
+            font-weight: bold;
+        }
+        /* Table */
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+        }
+        th {
+            background-color: green;
+            color: white;
+        }
+        .delete-btn {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .delete-btn:hover {
+            background: darkred;
+        }
+        /* Form */
+        .form-container {
+            margin-top: 20px;
+            background: #4CAF50;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #333;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: black;
+        }
+        /* Total Row */
+        .total-row {
+            font-weight: bold;
+            background-color: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Cashlytics</h2>
+        <a href="dashboard.html">📅 Current Month</a>
+        <a href="monthly_record.html">📜 Monthly Record</a>
+        <a href="fixed_cost.html">💰 Fixed Costs</a>
+        <a href="#">🚪 Log Off</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Profile Section -->
+        <div class="profile-container">
+            <h2>Fixed Costs</h2>
+            <div class="profile">
+                <div class="user">👤 BHEULLAA</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <table id="fixedCostsTable">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Amount</th>
+                        <th>Ending Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Motorcycle's insurance</td>
+                        <td class="amount">₹750</td>
+                        <td>15/12/2021</td>
+                        <td><button class="delete-btn">X</button></td>
+                    </tr>
+                    <tr>
+                        <td>Health insurance</td>
+                        <td class="amount">₹1000</td>
+                        <td>15/02/2022</td>
+                        <td><button class="delete-btn">X</button></td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td>Total</td>
+                        <td id="totalAmount">₹1750</td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <div class="form-container">
+                <h3>New Fixed Cost</h3>
+                <input type="text" id="description" placeholder="Description">
+                <input type="number" id="amount" placeholder="Amount">
+                <input type="date" id="end_date">
+                <button id="addButton">Add</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function updateTotal() {
+            let total = 0;
+            document.querySelectorAll(".amount").forEach(cell => {
+                total += parseFloat(cell.textContent.replace("₹", "")) || 0;
+            });
+            document.getElementById("totalAmount").textContent = `₹${total}`;
+        }
+
+        // ADD FUNCTION
+        document.getElementById("addButton").addEventListener("click", function () {
+            let desc = document.getElementById("description").value;
+            let amount = document.getElementById("amount").value;
+            let endDate = document.getElementById("end_date").value || "Never";
+
+            if (!desc || !amount) {
+                alert("Please enter a description and amount.");
+                return;
+            }
+
+            let table = document.getElementById("fixedCostsTable").getElementsByTagName('tbody')[0];
+            let row = table.insertRow();
+            row.innerHTML = `<td>${desc}</td><td class="amount">₹${amount}</td><td>${endDate}</td><td><button class="delete-btn">X</button></td>`;
+
+            document.getElementById("description").value = "";
+            document.getElementById("amount").value = "";
+            document.getElementById("end_date").value = "";
+
+            updateTotal();
+        });
+
+        // DELETE FUNCTION
+        document.getElementById("fixedCostsTable").addEventListener("click", function (e) {
+            if (e.target.classList.contains("delete-btn")) {
+                e.target.parentElement.parentElement.remove();
+                updateTotal();
+            }
+        });
+
+        // Update total on page load
+        updateTotal();
+    </script>
+
+</body>
+</html>
